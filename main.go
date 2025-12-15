@@ -9,6 +9,7 @@ func main() {
 	path := ""
 
 	if err := hid.Init(); err != nil {
+		fmt.Println("-1")
 		log.Fatal(err)
 	}
 
@@ -29,11 +30,13 @@ func main() {
 	})
 
 	if path == "" {
+		fmt.Println("-1")
 		log.Fatal("no mouse device found")
 	}
 
 	d, err := hid.OpenPath(path)
 	if err != nil {
+		fmt.Println("-1")
 		log.Fatal(err)
 	}
 
@@ -44,10 +47,12 @@ func main() {
 	b[3] = 0x01  // read (0x01) or write (0x02)
 	b[4] = 0x01  // ret len
 	if _, err := d.SendFeatureReport(b); err != nil {
+		fmt.Println("-1")
 		log.Println("SendFeatureReport: ", err)
 	}
 
 	if _, err := d.GetFeatureReport(b); err != nil {
+		fmt.Println("-1")
 		log.Fatal("GetFeatureReport: ", err)
 	}
 
