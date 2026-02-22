@@ -53,16 +53,22 @@ func main() {
 	}
 
 	tries := 0
-	for tries < 5 {
+	for tries < 10 {
 		tries += 1
 		if _, err := d.GetFeatureReport(b); err != nil {
 			fmt.Println("-1")
 			log.Fatal("GetFeatureReport: ", err)
 		}
-		if b[5] != 0 {
+		if b[5] > 0 && b[5] < 20 {
 			break
 		}
 		time.Sleep(100 * time.Millisecond)
+	}
+
+	// happens for ~500ms after mouse turning on
+	if b[5] == 255 {
+		fmt.Println("-1")
+		log.Fatal("mouse returned garbage data")
 	}
 
 	// number is in 5% increments
