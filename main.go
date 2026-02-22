@@ -2,6 +2,7 @@ package main
 import "log"
 import "fmt"
 import "os"
+import "time"
 import "github.com/sstallion/go-hid"
 
 func main() {
@@ -51,9 +52,17 @@ func main() {
 		log.Println("SendFeatureReport: ", err)
 	}
 
-	if _, err := d.GetFeatureReport(b); err != nil {
-		fmt.Println("-1")
-		log.Fatal("GetFeatureReport: ", err)
+	tries := 0
+	for tries < 5 {
+		tries += 1
+		if _, err := d.GetFeatureReport(b); err != nil {
+			fmt.Println("-1")
+			log.Fatal("GetFeatureReport: ", err)
+		}
+		if b[5] != 0 {
+			break
+		}
+		time.Sleep(100 * time.Millisecond)
 	}
 
 	// number is in 5% increments
